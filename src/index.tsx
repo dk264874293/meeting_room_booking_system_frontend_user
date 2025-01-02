@@ -17,7 +17,7 @@ import {
 } from "react-router-dom";
 import { Register } from "./page/Register/Register.tsx";
 import { Login } from "./page/Login/Login.tsx";
-// import { UpdatePassword } from './UpdatePassword';
+import { UpdatePassword } from './page/UpdatePassword/UpdatePassword.tsx';
 // import { ErrorPage } from './ErrorPage';
 
 const routes = [
@@ -36,7 +36,7 @@ const routes = [
   },
   {
     path: "update_password",
-    // element: <UpdatePassword />,
+    element: <UpdatePassword />,
   },
 ];
 const router = createBrowserRouter(routes);
