@@ -2,22 +2,20 @@
  * @Author: 汪培良 rick_wang@yunquna.com
  * @Date: 2024-12-27 17:20:20
  * @LastEditors: 汪培良 rick_wang@yunquna.com
- * @LastEditTime: 2024-12-27 17:48:46
+ * @LastEditTime: 2025-01-02 17:33:04
  * @FilePath: /meeting_room_booking_system_frontend_user/src/page/Login/Index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import React from "react";
-import { Button, Checkbox, Form, Input } from "antd";
+import { useNavigate, Link } from "react-router-dom";
+import { Button, Checkbox, Form, Input, message } from "antd";
+import { login } from "../../interfaces.ts";
 import "./login.css";
 
 interface LoginUser {
   username: string;
   password: string;
 }
-
-const onFinish = (values: LoginUser) => {
-  console.log(values);
-};
 
 const layout1 = {
   labelCol: { span: 4 },
@@ -30,6 +28,23 @@ const layout2 = {
 };
 
 export function Login() {
+  const navigate = useNavigate();
+  const onFinish = async (values: LoginUser) => {
+    const res = await login(values.username, values.password);
+    if (res.status === 201 || res.status === 200) {
+      message.success("登录成功");
+
+      localStorage.setItem("access_token", res.data.accessToken);
+      localStorage.setItem("refresh_token", res.data.refreshToken);
+      localStorage.setItem("user_info", JSON.stringify(res.data.userInfo));
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    } else {
+      message.error(res.data?.message || "系统繁忙，请稍后再试");
+    }
+  };
+
   return (
     <div id="login-container">
       <h1>会议室预订系统</h1>
@@ -52,8 +67,8 @@ export function Login() {
 
         <Form.Item {...layout2}>
           <div className="links">
-            <a href="">创建账号</a>
-            <a href="">忘记密码</a>
+            <Link to="/register">创建账号</Link>
+            <Link to="/update_password">忘记密码</Link>
           </div>
         </Form.Item>
 
