@@ -9,7 +9,7 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button, Checkbox, Form, Input, message } from "antd";
-import { login } from "../../interfaces.ts";
+import { login } from "../../interface/interfaces.ts";
 import "./login.css";
 
 interface LoginUser {

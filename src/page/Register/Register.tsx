@@ -2,7 +2,11 @@ import React, { useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button, Form, Input, message } from "antd";
 import "./register.css";
-import { login, registerCaptcha, register } from "../../interfaces.ts";
+import {
+  login,
+  registerCaptcha,
+  register,
+} from "../../interface/interfaces.ts";
 import { useForm } from "antd/es/form/Form";
 
 export interface RegisterUser {

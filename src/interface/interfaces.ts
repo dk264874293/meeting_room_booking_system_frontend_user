@@ -2,12 +2,12 @@
  * @Author: 汪培良 rick_wang@yunquna.com
  * @Date: 2025-01-02 16:49:05
  * @LastEditors: 汪培良 rick_wang@yunquna.com
- * @LastEditTime: 2025-01-02 17:18:53
+ * @LastEditTime: 2025-01-02 18:00:49
  * @FilePath: /meeting_room_booking_system_frontend_user/src/interfaces.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%A8
  */
 import axios from "axios";
-import { RegisterUser } from "./page/Register/Register.tsx";
+import { RegisterUser } from "../page/Register/Register.tsx";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3008/",
