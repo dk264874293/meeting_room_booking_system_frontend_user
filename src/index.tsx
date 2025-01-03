@@ -15,16 +15,31 @@ import {
   Link,
   Outlet,
 } from "react-router-dom";
+import { Menu } from "./page/Menu/Menu.tsx";
 import { Register } from "./page/Register/Register.tsx";
+import { Index } from "./page/Index/Index.tsx";
 import { Login } from "./page/Login/Login.tsx";
-import { UpdatePassword } from './page/UpdatePassword/UpdatePassword.tsx';
-// import { ErrorPage } from './ErrorPage';
+import { UpdatePassword } from "./page/UpdatePassword/UpdatePassword.tsx";
+import { ErrorPage } from "./page/ErrorPage/ErrorPage.tsx";
+import { UserManage } from "./page/UserManage/UserManage.tsx";
 
 const routes = [
   {
     path: "/",
-    element: <div>index</div>,
-    // errorElement: <ErrorPage />,
+    element: <Index></Index>,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/",
+        element: <Menu></Menu>,
+        children: [
+          {
+            path: "user_manage",
+            element: <UserManage />,
+          },
+        ],
+      },
+    ],
   },
   {
     path: "login",
