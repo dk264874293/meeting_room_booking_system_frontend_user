@@ -9,6 +9,7 @@
 import axios from "axios";
 import { message } from "antd";
 import { RegisterUser } from "../page/Register/Register.tsx";
+import { UserInfo } from "../pages/InfoModify/InfoModify.tsx";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3008/",
@@ -40,8 +41,11 @@ axiosInstance.interceptors.response.use(
   },
   async (error) => {
     let { data, config } = error.response;
-
-    if (data.code === 401 && !config.url.includes("/user/admin/refresh")) {
+    console.log("error", data, config);
+    if (
+      data.statusCode === 401 &&
+      !config.url.includes("/user/admin/refresh")
+    ) {
       const res = await refreshToken();
 
       if (res.status === 200) {
@@ -90,4 +94,16 @@ export async function userSearch(
       pageSize,
     },
   });
+}
+
+export async function getUserInfo() {
+  return await axiosInstance.get("/user/info");
+}
+
+export async function updateInfo(data: UserInfo) {
+  return await axiosInstance.post("/user/admin/update", data);
+}
+
+export async function updateUserInfoCaptcha() {
+  return await axiosInstance.get("/user/update/captcha");
 }

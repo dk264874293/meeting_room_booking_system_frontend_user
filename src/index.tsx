@@ -22,6 +22,9 @@ import { Login } from "./page/Login/Login.tsx";
 import { UpdatePassword } from "./page/UpdatePassword/UpdatePassword.tsx";
 import { ErrorPage } from "./page/ErrorPage/ErrorPage.tsx";
 import { UserManage } from "./page/UserManage/UserManage.tsx";
+import { ModifyMenu } from "./page/ModifyMenu/ModifyMenu.tsx";
+import { InfoModify } from "./page/InfoModify/InfoModify.tsx";
+import { PasswordModify } from "./page/PasswordModify/PasswordModify.tsx";
 
 const routes = [
   {
@@ -36,6 +39,20 @@ const routes = [
           {
             path: "user_manage",
             element: <UserManage />,
+          },
+        ],
+      },
+      {
+        path: "/user",
+        element: <ModifyMenu></ModifyMenu>,
+        children: [
+          {
+            path: "info_modify",
+            element: <InfoModify />,
+          },
+          {
+            path: "password_modify",
+            element: <PasswordModify />,
           },
         ],
       },
@@ -54,7 +71,7 @@ const routes = [
     element: <UpdatePassword />,
   },
 ];
-const router = createBrowserRouter(routes);
+export const router = createBrowserRouter(routes);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

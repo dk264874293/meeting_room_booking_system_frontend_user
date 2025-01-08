@@ -1,7 +1,8 @@
-import { Button, Form, Input, Table } from "antd";
-import React, { useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import { Button, Form, Input, Table, message } from "antd";
 import "./UserManage.css";
 import { ColumnsType } from "antd/es/table";
+import { userSearch } from "../../interface/interfaces.ts";
 
 interface SearchUser {
   username: string;
@@ -15,6 +16,7 @@ interface UserSearchResult {
   email: string;
   headPic: string;
   createTime: Date;
+  id: number;
 }
 const columns: ColumnsType<UserSearchResult> = [
   {
@@ -39,29 +41,46 @@ const columns: ColumnsType<UserSearchResult> = [
   },
 ];
 
-const data = [
-  {
-    key: "1",
-    username: "xx",
-    headPic: "xxx.png",
-    nickName: "xxx",
-    email: "xx@xx.com",
-    createTime: new Date(),
-  },
-  {
-    key: "12",
-    username: "yy",
-    headPic: "yy.png",
-    nickName: "yyy",
-    email: "yy@yy.com",
-    createTime: new Date(),
-  },
-];
-
 export function UserManage() {
-  const searchUser = useCallback(async (values: SearchUser) => {
-    console.log(values);
+  const [userList, setUserList] = useState([]);
+  const [pageNo, setPageNo] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  const searchUser = useCallback(
+    async (values: SearchUser) => {
+      console.log(values);
+      const { email, nickName, username } = values;
+      const res = await userSearch(username, nickName, email, pageNo, pageSize);
+      const { users } = res.data;
+      console.log("res.data", res.data);
+      if (res.status === 201 || res.status === 200) {
+        setUserList(
+          users.map((item: UserSearchResult) => {
+            return {
+              key: item.username,
+              ...item,
+            };
+          })
+        );
+      } else {
+        message.error(data || "系统繁忙，请稍后再试");
+      }
+    },
+    [pageNo, pageSize]
+  );
+
+  const changePage = useCallback(function(pageNo: number, pageSize: number) {
+    setPageNo(pageNo);
+    setPageSize(pageSize);
   }, []);
+
+  useEffect(() => {
+    searchUser({
+      username: "",
+      email: "",
+      nickName: "",
+    });
+  }, [pageNo, pageSize]);
 
   return (
     <div id="userManage-container">
@@ -93,10 +112,13 @@ export function UserManage() {
       <div className="userManage-table">
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={userList}
           pagination={{
-            pageSize: 10,
+            current: pageNo,
+            pageSize: pageSize,
+            onChange: changePage,
           }}
+          rowKey={(record) => record.id}
         />
       </div>
     </div>
