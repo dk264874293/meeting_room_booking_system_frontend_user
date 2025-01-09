@@ -1,11 +1,14 @@
 import React from "react";
 import { Button, Form, Input, message } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import "./info_modify.css";
-import { useNavigate } from "react-router-dom";
 import { HeadPicUpload } from "./HeadPicUpload.tsx";
-import { getUserInfo } from "../../interface/interfaces.ts";
+import {
+  getUserInfo,
+  updateUserInfoCaptcha,
+  updateInfo,
+} from "../../interface/interfaces.ts";
 
 export interface UserInfo {
   username: string;
@@ -22,11 +25,30 @@ const layout1 = {
 
 export function InfoModify() {
   const [form] = useForm();
-  const navigate = useNavigate();
 
-  const onFinish = useCallback(async (values: UserInfo) => {}, []);
+  const onFinish = useCallback(async (values: UserInfo) => {
+    const res = await updateInfo(values);
 
-  const sendCaptcha = useCallback(async function() {}, []);
+    if (res.status === 201 || res.status === 200) {
+      const { message: msg, data } = res.data;
+      if (msg === "success") {
+        message.success("用户信息更新成功");
+      } else {
+        message.error(data);
+      }
+    } else {
+      message.error("系统繁忙，请稍后再试");
+    }
+  }, []);
+
+  const sendCaptcha = useCallback(async function() {
+    const res = await updateUserInfoCaptcha();
+    if (res.status === 201 || res.status === 200) {
+      message.success(res.data.data);
+    } else {
+      message.error("系统繁忙，请稍后再试");
+    }
+  }, []);
 
   useEffect(() => {
     async function query() {

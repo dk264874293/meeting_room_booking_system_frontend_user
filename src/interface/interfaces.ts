@@ -10,6 +10,7 @@ import axios from "axios";
 import { message } from "antd";
 import { RegisterUser } from "../page/Register/Register.tsx";
 import { UserInfo } from "../pages/InfoModify/InfoModify.tsx";
+import { UpdatePassword } from "../page/PasswordModify/PasswordModify.tsx";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3008/",
@@ -106,4 +107,16 @@ export async function updateInfo(data: UserInfo) {
 
 export async function updateUserInfoCaptcha() {
   return await axiosInstance.get("/user/update/captcha");
+}
+
+export async function updatePasswordCaptcha(email: string) {
+  return await axiosInstance.get("/user/update_password/captcha", {
+    params: {
+      address: email,
+    },
+  });
+}
+
+export async function updatePassword(data: UpdatePassword) {
+  return await axiosInstance.post("/user/admin/update_password", data);
 }

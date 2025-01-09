@@ -16,7 +16,8 @@ const props: DraggerProps = {
   onChange(info) {
     const { status } = info.file;
     if (status === "done") {
-      onChange(info.file.response.data);
+      console.log(info.file.response, onChange);
+      onChange(info.file.response);
       message.success(`${info.file.name} 文件上传成功`);
     } else if (status === "error") {
       message.error(`${info.file.name} 文件上传失败`);
