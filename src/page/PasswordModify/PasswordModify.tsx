@@ -11,6 +11,7 @@ import {
 } from "../../interface/interfaces.ts";
 
 export interface UpdatePassword {
+  username: string;
   email: string;
   captcha: string;
   password: string;
@@ -68,7 +69,7 @@ export function PasswordModify() {
     async function query() {
       const res = await getUserInfo();
 
-      const { data } = res;
+      const { data } = res.data;
       console.log("res.data", res.data);
 
       if (res.status === 201 || res.status === 200) {

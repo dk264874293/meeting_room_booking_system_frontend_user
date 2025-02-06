@@ -2,7 +2,7 @@
  * @Author: 汪培良 rick_wang@yunquna.com
  * @Date: 2024-12-27 17:20:20
  * @LastEditors: 汪培良 rick_wang@yunquna.com
- * @LastEditTime: 2025-01-02 17:33:04
+ * @LastEditTime: 2025-02-01 11:02:22
  * @FilePath: /meeting_room_booking_system_frontend_user/src/page/Login/Index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -31,12 +31,14 @@ export function Login() {
   const navigate = useNavigate();
   const onFinish = async (values: LoginUser) => {
     const res = await login(values.username, values.password);
+    console.log("res", res);
     if (res.status === 201 || res.status === 200) {
       message.success("登录成功");
+      const { data } = res.data;
 
-      localStorage.setItem("access_token", res.data.accessToken);
-      localStorage.setItem("refresh_token", res.data.refreshToken);
-      localStorage.setItem("user_info", JSON.stringify(res.data.userInfo));
+      localStorage.setItem("access_token", data.accessToken);
+      localStorage.setItem("refresh_token", data.refreshToken);
+      localStorage.setItem("user_info", JSON.stringify(data.userInfo));
       setTimeout(() => {
         navigate("/");
       }, 1000);

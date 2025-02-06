@@ -2,7 +2,7 @@
  * @Author: 汪培良 rick_wang@yunquna.com
  * @Date: 2025-01-02 16:49:05
  * @LastEditors: 汪培良 rick_wang@yunquna.com
- * @LastEditTime: 2025-01-02 18:00:49
+ * @LastEditTime: 2025-02-01 12:22:19
  * @FilePath: /meeting_room_booking_system_frontend_user/src/interfaces.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%A8
  */
@@ -38,15 +38,13 @@ axiosInstance.interceptors.request.use(function(config) {
 
 axiosInstance.interceptors.response.use(
   (response) => {
+    console.log("response", response);
     return response;
   },
   async (error) => {
     let { data, config } = error.response;
     console.log("error", data, config);
-    if (
-      data.statusCode === 401 &&
-      !config.url.includes("/user/admin/refresh")
-    ) {
+    if (data.code === 401 && !config.url.includes("/user/admin/refresh")) {
       const res = await refreshToken();
 
       if (res.status === 200) {
@@ -105,8 +103,12 @@ export async function updateInfo(data: UserInfo) {
   return await axiosInstance.post("/user/admin/update", data);
 }
 
-export async function updateUserInfoCaptcha() {
-  return await axiosInstance.get("/user/update/captcha");
+export async function updateUserInfoCaptcha(email: string) {
+  return await axiosInstance.get("/user/update/captcha", {
+    params: {
+      address: email,
+    },
+  });
 }
 
 export async function updatePasswordCaptcha(email: string) {

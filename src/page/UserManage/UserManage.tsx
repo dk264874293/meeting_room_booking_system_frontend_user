@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Button, Form, Input, Table, message } from "antd";
+import { Button, Form, Input, Table, message, Image } from "antd";
 import "./UserManage.css";
 import { ColumnsType } from "antd/es/table";
 import { userSearch } from "../../interface/interfaces.ts";
@@ -26,6 +26,13 @@ const columns: ColumnsType<UserSearchResult> = [
   {
     title: "头像",
     dataIndex: "headPic",
+    render: (value) => {
+      return value ? (
+        <Image width={50} src={`http://localhost:3008/${value}`} />
+      ) : (
+        ""
+      );
+    },
   },
   {
     title: "昵称",
@@ -51,7 +58,7 @@ export function UserManage() {
       console.log(values);
       const { email, nickName, username } = values;
       const res = await userSearch(username, nickName, email, pageNo, pageSize);
-      const { users } = res.data;
+      const { users } = res.data.data;
       console.log("res.data", res.data);
       if (res.status === 201 || res.status === 200) {
         setUserList(
@@ -63,7 +70,7 @@ export function UserManage() {
           })
         );
       } else {
-        message.error(data || "系统繁忙，请稍后再试");
+        message.error(res.data.data || "系统繁忙，请稍后再试");
       }
     },
     [pageNo, pageSize]

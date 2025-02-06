@@ -42,7 +42,11 @@ export function InfoModify() {
   }, []);
 
   const sendCaptcha = useCallback(async function() {
-    const res = await updateUserInfoCaptcha();
+    const address = form.getFieldValue("email");
+    if (!address) {
+      return message.error("邮箱地址为空");
+    }
+    const res = await updateUserInfoCaptcha(address);
     if (res.status === 201 || res.status === 200) {
       message.success(res.data.data);
     } else {
@@ -54,7 +58,7 @@ export function InfoModify() {
     async function query() {
       const res = await getUserInfo();
 
-      const { data } = res;
+      const { data } = res.data;
       console.log("res.data", res.data);
 
       if (res.status === 201 || res.status === 200) {
